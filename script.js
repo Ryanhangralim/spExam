@@ -46,8 +46,14 @@ function set_toppings(pizza_topping) {
     //Checks if topping is avaliable for the selected pizza
     if (pizza_topping.includes(toppings[i].id)) {
       toppings[i].disabled = false;
-      console.log(toppings[i]);
     } else {
+      //if topping is checked and user changes pizza
+      if (toppings[i].checked) {
+        //subtract topping price from total price and uncheck topping
+        total_price -= toppings[i].value;
+        update_price();
+        toppings[i].checked = false;
+      }
       toppings[i].disabled = true;
     }
   }
@@ -106,6 +112,17 @@ function add_size_price(event) {
   }
 }
 
+//function to add toppings price
+function add_topping_price(event) {
+  let topping_value = Number(event.target.value);
+  if (event.target.checked) {
+    total_price += topping_value;
+  } else {
+    total_price -= topping_value;
+  }
+  update_price();
+}
+
 //Add event listerners to buttons
 pizza_1.addEventListener("change", add_pizza_price);
 pizza_2.addEventListener("change", add_pizza_price);
@@ -113,3 +130,6 @@ pizza_3.addEventListener("change", add_pizza_price);
 small_size.addEventListener("change", add_size_price);
 medium_size.addEventListener("change", add_size_price);
 large_size.addEventListener("change", add_size_price);
+toppings.forEach(function (topping) {
+  topping.addEventListener("click", add_topping_price);
+});
